@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+sudo docker build . -t uirelator
+sudo docker run -it \
+  --env-file=docker.env \
+  -p 3111:3111 uirelator

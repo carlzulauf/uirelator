@@ -1,0 +1,2 @@
+class SimulationConfig < ApplicationRecord
+end
