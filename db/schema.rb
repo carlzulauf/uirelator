@@ -12,13 +12,16 @@
 
 ActiveRecord::Schema.define(version: 2021_03_01_034247) do
 
-  create_table "simulation_configs", force: :cascade do |t|
-    t.string "simulation_key"
-    t.text "simulation_params"
-    t.text "completed_simulation"
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "simulations", force: :cascade do |t|
+    t.string "key"
+    t.string "description"
+    t.text "params"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["simulation_key"], name: "index_simulation_configs_on_simulation_key"
+    t.index ["key"], name: "index_simulations_on_key"
   end
 
 end

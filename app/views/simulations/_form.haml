@@ -1,0 +1,137 @@
+= form_for(simulation, as: :simulation) do |f|
+  - tooltip_options = { data: { "bs-toggle" => "tooltip" } }
+  .card.mb-3
+    .card-header Simulation Options
+    .card-body
+      - if simulation.key.present?
+        .row
+          .col-4.col-form-label.text-end Key
+          .col-8= simulation.key
+      = f.fields_for :params do |s|
+        .row.mb-3
+          = s.label :description, class: "col-4 col-form-label text-end", title: "Just a friendly label to help you remember this simulation.", **tooltip_options
+          .col-8
+            = s.text_field :description, class: "form-control"
+        .row.mb-3
+          = s.label :noise, class: "col-4 col-form-label text-end", title: "Ratio between 0 and 1. Specifies max noise to introduce to growth and inflation.", **tooltip_options
+          .col-8
+            = s.text_field :noise, class: "form-control"
+        .row.mb-3
+          = s.label :investment_growth_rate, "Investment Growth", class: "col-4 col-form-label text-end", title: "Expected annual growth rate of investments.", **tooltip_options
+          .col-8
+            .input-group
+              = s.text_field :investment_growth_rate, class: "form-control"
+              %span.input-group-text %
+        .row.mb-3
+          = s.label :inflation_rate, "Inflation", class: "col-4 col-form-label text-end", title: "Expected annual inflation rate.", **tooltip_options
+          .col-8
+            .input-group
+              = s.text_field :inflation_rate, class: "form-control"
+              %span.input-group-text %
+        .row
+          = s.label :short_term_gains_ratio, class: "col-4 col-form-label text-end", title: "Ratio between 0 and 1 specifying ratio of growth likely to be short term capital gains (instead of long term). Only applies to growth in taxable savings.", **tooltip_options
+          .col-8
+            = s.text_field :short_term_gains_ratio, class: "form-control"
+  = f.fields_for :params do |s|
+    .card.mb-3
+      .card-header Retiree
+      .card-body
+        .row.mb-3
+          = s.label :name, class: "col-4 col-form-label text-end", title: "The name of the retiree (optional)", **tooltip_options
+          .col-8
+            = s.text_field :name, class: "form-control"
+        .row.mb-3
+          = s.label :retirement_date, "Target Retirement", class: "col-4 col-form-label text-end", title: "The date the retiree plans to start their retirement.", **tooltip_options
+          .col-8
+            = s.date_field :retirement_date, class: "form-control"
+        .row.mb-3
+          = s.label :retirement_date, "Target Death", class: "col-4 col-form-label text-end", title: "The date the retiree hopes to live to.", **tooltip_options
+          .col-8
+            = s.date_field :retirement_date, class: "form-control"
+        .row
+          = s.label :monthly_allowance, "Monthly Allowance", class: "col-4 col-form-label text-end", title: "The amount, in today's dollars, expected to cover all expenses after the retirement date. This will be adjusted for inflation.", **tooltip_options
+          .col-8
+            .input-group
+              %span.input-group-text $
+              = s.text_field :monthly_allowance, class: "form-control"
+    .card.mb-3
+      .card-header Income
+      .card-body
+        .row.mb-3
+          = s.label :salary, "Annual Salary", class: "col-4 col-form-label text-end", title: "Current annual wage income from all sources.", **tooltip_options
+          .col-8
+            .input-group
+              %span.input-group-text $
+              = s.text_field :salary, class: "form-control"
+        .row
+          = s.label :salary_growth_rate, "Salary Growth", class: "col-4 col-form-label text-end", title: "Expected annual growth rate of salary, expressed as a percent.", **tooltip_options
+          .col-8
+            .input-group
+              = s.text_field :salary_growth_rate, class: "form-control"
+              %span.input-group-text %
+    .card.mb-3
+      .card-header Retirement Contributions
+      .card-body
+        .row.mb-3
+          = s.label :percent_401k_contribution, "401(k) Contribution", class: "col-4 col-form-label text-end", title: "Percent of salary contributed to a 401(k)", **tooltip_options
+          .col-8
+            .input-group
+              = s.text_field :percent_401k_contribution, class: "form-control"
+              %span.input-group-text %
+        .row.mb-3
+          = s.label :percent_401k_match, "401(k) Match", class: "col-4 col-form-label text-end", title: "Percent of 401(k) contribution matched by employer (usually 100% or 50%).", **tooltip_options
+          .col-8
+            .input-group
+              = s.text_field :percent_401k_match, class: "form-control"
+              %span.input-group-text %
+        .row.mb-3
+          = s.label :max_percent_401k_match, "401(k) Match Max", class: "col-4 col-form-label text-end", title: "Max percent of salary that employer will match to 401(k). May be the same as your contribution percent.", **tooltip_options
+          .col-8
+            .input-group
+              = s.text_field :max_percent_401k_match, class: "form-control"
+              %span.input-group-text %
+        .row.mb-3
+          = s.label :annual_ira_contribution, "IRA Contribution", class: "col-4 col-form-label text-end", title: "Annual contribution to a traditional IRA. These contributions are tax deductible.", **tooltip_options
+          .col-8
+            .input-group
+              %span.input-group-text $
+              = s.text_field :annual_ira_contribution, class: "form-control"
+        .row.mb-3
+          = s.label :annual_roth_contribution, "Roth IRA Contribution", class: "col-4 col-form-label text-end", title: "Annual contribution to a Roth IRA.", **tooltip_options
+          .col-8
+            .input-group
+              %span.input-group-text $
+              = s.text_field :annual_roth_contribution, class: "form-control"
+        .row.mb-3
+          = s.label :annual_roth_conversion, "Roth IRA Conversion", class: "col-4 col-form-label text-end", title: "Amount you plan to convert annually from a traditional IRA (pre-tax) to a Roth IRA (post-tax). This amount will be added to taxable income each year.", **tooltip_options
+          .col-8
+            .input-group
+              %span.input-group-text $
+              = s.text_field :annual_roth_conversion, class: "form-control"
+        .row.mb-3
+          = s.label :monthly_savings, "Monthly Savings", class: "col-4 col-form-label text-end", title: "In addition to qualified retirement contributions, specify total monthly savings to a taxable investment account meant to contribute towards retirement.", **tooltip_options
+          .col-8
+            .input-group
+              %span.input-group-text $
+              = s.text_field :monthly_savings, class: "form-control"
+    .card.mb-3
+      .card-header Current Wealth
+      .card-body
+        .row.mb-3
+          = s.label :ira_balance, "IRA/401(k) Balance", class: "col-4 col-form-label text-end", title: "Total of balances from all IRA, 401(k), and any other Qualified Retirement Plan (QRP) accounts containing pre-tax dollars.", **tooltip_options
+          .col-8
+            .input-group
+              %span.input-group-text $
+              = s.text_field :ira_balance, class: "form-control"
+        .row.mb-3
+          = s.label :roth_balance, "Roth IRA Balance", class: "col-4 col-form-label text-end", title: "Total of balances from all Roth IRA and Roth 401(k) accounts.", **tooltip_options
+          .col-8
+            .input-group
+              %span.input-group-text $
+              = s.text_field :roth_balance, class: "form-control"
+        .row
+          = s.label :savings_balance, "Savings Balance", class: "col-4 col-form-label text-end", title: "Total of balances from all taxable savings and investment accounts intended to be used towards retirement.", **tooltip_options
+          .col-8
+            .input-group
+              %span.input-group-text $
+              = s.text_field :savings_balance, class: "form-control"

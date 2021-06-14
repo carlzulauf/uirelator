@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.0.1'
 
 gem 'rails', '~> 6.1.3'
-gem 'retirelator', git: "git@linkleaf.com:retirelator"
+gem 'retirelator', path: "../retirelator"
 gem 'puma', '~> 5.0'
 
 gem 'pg'
@@ -15,6 +15,8 @@ gem 'ulid'
 gem 'sass-rails', '>= 6'
 gem 'webpacker', '~> 5.0'
 gem 'turbolinks', '~> 5'
+gem 'pry-rails'
+gem 'haml-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

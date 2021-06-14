@@ -11,6 +11,22 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header class="p-3 bg-dark">
+      <div class="container">
+        <div class="d-flex align-items-center justify-content-center">
+          <ul class="nav col-auto me-auto mb-2 justify-content-center mb-md-0">
+            <li><%= link_to "Retirement Simulator", root_path, class: "nav-link px-2" %></li>
+            <li><%= link_to "About", about_path, class: "nav-link px-2 text-white" %></li>
+          </ul>
+
+          <div class="text-end">
+            <button type="button" class="btn btn-secondary">Login to 💾</button>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <%= yield %>
+    </div>
   </body>
 </html>
