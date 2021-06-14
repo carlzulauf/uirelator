@@ -1,0 +1,14 @@
+i.sprite-icon {
+  svg {
+    height: 1.1em;
+    vertical-align: middle;
+    fill: #ECECEC;
+    // stroke: #FF0000;
+    margin-top: -0.2em;
+  }
+}
+
+.badge i.sprite-icon svg {
+  height: 1.05em;
+  margin-top: 0;
+}
