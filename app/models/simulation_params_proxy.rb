@@ -14,7 +14,7 @@ class SimulationParamsProxy < ActiveModel::Type::Value
   end
 
   def from_hash(hash)
-    return SimulationParams.new if hash.blank?
+    return SimulationParams.default if hash.blank?
     SimulationParams.new(hash.deep_symbolize_keys)
   end
 end
