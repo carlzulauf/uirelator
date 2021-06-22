@@ -13,4 +13,8 @@ class IconSprite < OptStruct.new(:sprite, :name, :view_box)
     icon = icons.detect { |i| i.sprite == style.to_s } if style.present?
     icon || icons.first
   end
+
+  def as_json(*)
+    options
+  end
 end

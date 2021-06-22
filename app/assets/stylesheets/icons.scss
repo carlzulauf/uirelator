@@ -2,9 +2,15 @@ i.sprite-icon {
   svg {
     height: 1.1em;
     vertical-align: middle;
-    fill: #ECECEC;
+    fill: $white;
     // stroke: #FF0000;
     margin-top: -0.2em;
+  }
+
+  @each $color, $value in $theme-colors {
+    &.#{$color} {
+      svg { fill: $value; }
+    }
   }
 }
 

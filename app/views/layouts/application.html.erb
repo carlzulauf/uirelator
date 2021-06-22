@@ -11,6 +11,13 @@
   </head>
 
   <body>
+    <% preload_js_data(:icon_sprites, icon_sprites_metadata) %>
+    <script type="text/javascript">
+      window.Preloads = {};
+      <% preloaded_js_data.each do |key, data| %>
+      window.Preloads[<%= key.to_s.inspect.html_safe %>] = <%= data.html_safe %>;
+      <% end %>
+    </script>
     <header class="p-3 bg-dark">
       <div class="container">
         <div class="d-flex align-items-center justify-content-center">
@@ -27,8 +34,11 @@
         </div>
       </div>
     </header>
-    <div class="container">
+    <div class="container" id="app">
       <%= yield %>
     </div>
+    <% Array.wrap(js_packs).each do |js_pack| %>
+      <%= javascript_pack_tag js_pack %>
+    <% end %>
   </body>
 </html>

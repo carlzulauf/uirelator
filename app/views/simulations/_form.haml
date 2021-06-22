@@ -1,3 +1,4 @@
+-# - add_js_pack("simulation_form")
 = form_for(simulation, as: :simulation) do |f|
   - tooltip_options = { data: { "bs-toggle" => "tooltip" } }
   .card.mb-3
@@ -74,11 +75,6 @@
               = s.text_field :salary_growth_rate, class: "form-control"
               %span.input-group-text %
     #fixedIncomesFields
-      #addFixedIncome.row.mb-3.px-3
-        %a.btn.btn-secondary
-          .row
-            .col-1.text-start= icon(:plus)
-            .col-11.text-center Add Fixed Income
     .card.mb-3
       .card-header Retirement Contributions
       .card-body
