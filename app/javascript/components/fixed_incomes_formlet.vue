@@ -1,10 +1,6 @@
 <template>
   <div>
-    <div v-for="account in accounts" class="card mb-3">
-      <div class="card-body">
-        Test
-      </div>
-    </div>
+    <FixedIncomeInput v-for="(account, index) in accounts" :account="account" :index="index"/>
     <div class="row mb-3 justify-content-center">
       <div class="col-12 col-sm-8 col-md-6 col-lg-4 d-grid">
         <a class="btn btn-secondary" @click="addAccount">
@@ -23,11 +19,13 @@
 </template>
 
 <script>
-import Icon from 'components/icon'
+import Icon from 'components/icon';
+import FixedIncomeInput from 'components/fixed_income_input';
 
 export default {
   components: {
-    Icon
+    Icon,
+    FixedIncomeInput
   },
   data() {
     return {
@@ -40,11 +38,19 @@ export default {
       this.accounts.push(this.defaultAccount())
     },
     defaultAccount() {
+      let time = new Date();
+      let date = [
+        time.getFullYear(),
+        (time.getMonth() + 1).toString().padStart(2, '0'),
+        time.getDate().toString().padStart(2, '0')
+      ].join("-");
       return {
         name: 'Fixed Income Account',
         monthly_income: 0,
         indexed: true,
         taxable: true,
+        start_date: date,
+        stop_date: null,
       };
     }
   }

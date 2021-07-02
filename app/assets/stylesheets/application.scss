@@ -1,6 +1,26 @@
-@import "bootswatch/dist/darkly/variables";
-@import 'bootstrap/scss/bootstrap';
-@import "bootswatch/dist/darkly/bootswatch";
+@import "ui";
 
-@import "icons";
-// @import "layout";
+// ICONS
+//  I'd like this to be in it's own file, but it needs variables from "ui"
+i.sprite-icon {
+  svg {
+    height: 1.1em;
+    vertical-align: middle;
+    fill: $white;
+    // stroke: #FF0000;
+    margin-top: -0.2em;
+  }
+
+  @each $color, $value in $theme-colors {
+    &.#{$color} {
+      svg { fill: $value; }
+    }
+  }
+}
+
+.badge i.sprite-icon svg {
+  height: 1.05em;
+  margin-top: 0;
+}
+
+// \ICONS
