@@ -37,8 +37,5 @@
     <div class="container" id="app">
       <%= yield %>
     </div>
-    <% Array.wrap(js_packs).each do |js_pack| %>
-      <%= javascript_pack_tag js_pack %>
-    <% end %>
   </body>
 </html>

@@ -114,6 +114,13 @@
             .input-group
               %span.input-group-text $
               = s.text_field :annual_roth_conversion, class: "form-control"
+            .mx-2.mt-2
+              .form-check
+                = s.check_box :roth_conversion_taxes_from_savings, class: "form-check-input"
+                = s.label :roth_conversion_taxes_from_savings, "Taxes from savings", title: "Pay Roth Conversion taxes from savings instead of IRA.", **tooltip_options
+              .form-check
+                = s.check_box :roth_conversions_after_retirement, class: "form-check-input"
+                = s.label :roth_conversions_after_retirement, "Continue after retirement", title: "Continue annual conversions from IRA -> Roth after retirement date and until IRA depleated.", **tooltip_options
         .row
           = s.label :monthly_savings, "Monthly Savings", class: "col-4 col-form-label text-center", title: "In addition to qualified retirement contributions, specify total monthly savings to a taxable investment account meant to contribute towards retirement.", **tooltip_options
           .col-8
@@ -121,7 +128,7 @@
               %span.input-group-text $
               = s.text_field :monthly_savings, class: "form-control"
     .card.mb-3
-      .card-header Current Retirement
+      .card-header Current Retirement Savings
       .card-body
         .row.mb-3
           = s.label :ira_balance, "IRA/401(k) Balance", class: "col-4 col-form-label text-center", title: "Total of balances from all IRA, 401(k), and any other Qualified Retirement Plan (QRP) accounts containing pre-tax dollars.", **tooltip_options

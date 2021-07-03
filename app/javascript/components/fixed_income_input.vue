@@ -1,12 +1,27 @@
 <template>
   <div class="card mb-3">
-    <div class="card-header">Fixed Income #{{index + 1}}</div>
+    <div class="card-header">
+      <div class="row">
+        <div class="col">
+          Fixed Income #{{index + 1}}
+        </div>
+        <div class="col text-end">
+          <a
+            title="Remove Fixed Income Account"
+            data-bs-toggle="tooltip"
+            class="remove-account"
+            @click="removeAccount">
+            <Icon name="window-close" class="danger"/>
+          </a>
+        </div>
+      </div>
+    </div>
     <div class="card-body">
       <!-- name -->
       <div class="row mb-3">
         <label
           class="col-4 col-form-label text-center"
-          title="Description of fixed income account"
+          title="Description/name of fixed income account."
           data-bs-toggle="tooltip"
           :for="idPrefix + '_name'"
           >Description</label>
@@ -23,7 +38,7 @@
       <div class="row mb-3">
         <label
           class="col-4 col-form-label text-center"
-          title="Amount account is expected to payout per month, in today's dollars"
+          title="Amount account is expected to payout per month, in today's dollars."
           data-bs-toggle="tooltip"
           :for="idPrefix + '_monthly_income'"
           >Monthly Income</label>
@@ -43,7 +58,7 @@
       <div class="row mb-3">
         <label
           class="col-4 col-form-label text-center"
-          title="Date this account begins to start paying out"
+          title="Date this account begins to start paying out."
           data-bs-toggle="tooltip"
           :for="idPrefix + '_start_date'"
           >Start Date</label>
@@ -60,7 +75,7 @@
       <div class="row mb-3">
         <label
           class="col-4 col-form-label text-center"
-          title="Date this account stops paying account. Optional: may not apply."
+          title="Date this account stops paying out. If left blank then account will pay until simulated death."
           data-bs-toggle="tooltip"
           :for="idPrefix + '_stop_date'"
           >Stop Date</label>
@@ -73,37 +88,39 @@
             v-model="account.stop_date"/>
         </div>
       </div>
-      <div class="row justify-content-evenly">
-        <div class="col-auto">
-          <div class="form-check">
+      <div class="row mb-3">
+        <label
+          class="col-4 col-form-label text-center"
+          title="Indexed for inflation, starting from start date."
+          data-bs-toggle="tooltip"
+          :for="idPrefix + '_indexed'"
+          >Indexed</label>
+        <div class="col-8 align-bottom">
+          <div class="form-check form-switch pt-2">
             <input
               type="checkbox"
               class="form-check-input"
               :id="idPrefix + '_indexed'"
               :name="paramPrefix + '[indexed]'"
               v-model="account.indexed"/>
-            <label
-              class="form-check-label"
-              title="Indexed for inflation, starting from start date."
-              data-bs-toggle="tooltip"
-              :for="idPrefix + '_indexed'"
-              >Indexed</label>
           </div>
         </div>
-        <div class="col-auto">
-          <div class="form-check">
+      </div>
+      <div class="row">
+        <label
+          class="col-4 col-form-label text-center"
+          title="Payments from this account are added to taxable income."
+          data-bs-toggle="tooltip"
+          :for="idPrefix + '_taxable'"
+          >Taxable</label>
+        <div class="col-8">
+          <div class="form-check form-switch pt-2">
             <input
               type="checkbox"
               class="form-check-input"
               :id="idPrefix + '_taxable'"
               :name="paramPrefix + '[taxable]'"
               v-model="account.taxable"/>
-            <label
-              class="form-check-label"
-              title="Payments from this account are added to taxable income."
-              data-bs-toggle="tooltip"
-              :for="idPrefix + '_taxable'"
-              >Taxable</label>
           </div>
         </div>
       </div>
@@ -113,10 +130,11 @@
 
 <script>
 
-import Tooltips from "layout/tooltips"
+import Icon from 'components/icon';
+import Tooltips from "layout/tooltips";
 
 export default {
-  components: {},
+  components: { Icon },
   props: ['index', 'account'],
   data() {
     return {
@@ -125,12 +143,20 @@ export default {
     };
   },
   mounted() {
-    Tooltips.activate(this.$el);
+    this.tooltips = Tooltips.activate(this.$el);
+  },
+  beforeDestroy() {
+    this.tooltips.forEach((tooltip) => tooltip.dispose());
+  },
+  methods: {
+    removeAccount() {
+      this.$emit('remove-account', this.index)
+    }
   }
 }
 
 </script>
 
 <style scoped>
-
+  .remove-account { cursor: pointer; }
 </style>

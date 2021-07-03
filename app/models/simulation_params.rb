@@ -1,6 +1,6 @@
 class SimulationParams < OptStruct.new
   def self.default
-    params = Retirelator.default_params.without("name", "date_of_birth")
+    params = Retirelator.default_params.without("name")
     new **params.deep_symbolize_keys
   end
 
@@ -56,6 +56,7 @@ class SimulationParams < OptStruct.new
   options :percent_401k_contribution, :percent_401k_match, :max_percent_401k_match
   options :annual_ira_contribution, :annual_roth_contribution, :annual_roth_conversion
   options :monthly_savings
+  options :roth_conversion_taxes_from_savings, :roth_conversions_after_retirement
 
   # CURRENT RETIREMENT
   options :ira_balance, :roth_balance, :savings_balance

@@ -1,6 +1,10 @@
 <template>
   <div>
-    <FixedIncomeInput v-for="(account, index) in accounts" :account="account" :index="index"/>
+    <FixedIncomeInput
+      @remove-account="removeAccount($event)"
+      v-for="(account, index) in accounts"
+      :account="account"
+      :index="index"/>
     <div class="row mb-3 justify-content-center">
       <div class="col-12 col-sm-8 col-md-6 col-lg-4 d-grid">
         <a class="btn btn-secondary" @click="addAccount">
@@ -19,6 +23,7 @@
 </template>
 
 <script>
+
 import Icon from 'components/icon';
 import FixedIncomeInput from 'components/fixed_income_input';
 
@@ -52,6 +57,9 @@ export default {
         start_date: date,
         stop_date: null,
       };
+    },
+    removeAccount(deletedIndex) {
+      this.accounts.splice(deletedIndex, 1);
     }
   }
 }
