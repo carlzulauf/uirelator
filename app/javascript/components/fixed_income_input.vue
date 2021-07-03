@@ -2,6 +2,7 @@
   <div class="card mb-3">
     <div class="card-header">Fixed Income #{{index + 1}}</div>
     <div class="card-body">
+      <!-- name -->
       <div class="row mb-3">
         <label
           class="col-4 col-form-label text-center"
@@ -15,9 +16,10 @@
             type="text"
             :id="idPrefix + '_name'"
             :name="paramPrefix + '[name]'"
-            :value="account.name"/>
+            v-model="account.name"/>
         </div>
       </div>
+      <!-- monthly_income -->
       <div class="row mb-3">
         <label
           class="col-4 col-form-label text-center"
@@ -33,10 +35,11 @@
               type="text"
               :id="idPrefix + '_monthly_income'"
               :name="paramPrefix + '[monthly_income]'"
-              :value="account.monthly_income"/>
+              v-model="account.monthly_income"/>
           </div>
         </div>
       </div>
+      <!-- start_date -->
       <div class="row mb-3">
         <label
           class="col-4 col-form-label text-center"
@@ -50,13 +53,14 @@
             type="date"
             :id="idPrefix + '_start_date'"
             :name="paramPrefix + '[start_date]'"
-            :value="account.start_date"/>
+            v-model="account.start_date"/>
         </div>
       </div>
+      <!-- stop_date -->
       <div class="row mb-3">
         <label
           class="col-4 col-form-label text-center"
-          title="Date this account stops paying account. May not apply."
+          title="Date this account stops paying account. Optional: may not apply."
           data-bs-toggle="tooltip"
           :for="idPrefix + '_stop_date'"
           >Stop Date</label>
@@ -66,7 +70,41 @@
             type="date"
             :id="idPrefix + '_stop_date'"
             :name="paramPrefix + '[stop_date]'"
-            :value="account.stop_date"/>
+            v-model="account.stop_date"/>
+        </div>
+      </div>
+      <div class="row justify-content-evenly">
+        <div class="col-auto">
+          <div class="form-check">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              :id="idPrefix + '_indexed'"
+              :name="paramPrefix + '[indexed]'"
+              v-model="account.indexed"/>
+            <label
+              class="form-check-label"
+              title="Indexed for inflation, starting from start date."
+              data-bs-toggle="tooltip"
+              :for="idPrefix + '_indexed'"
+              >Indexed</label>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="form-check">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              :id="idPrefix + '_taxable'"
+              :name="paramPrefix + '[taxable]'"
+              v-model="account.taxable"/>
+            <label
+              class="form-check-label"
+              title="Payments from this account are added to taxable income."
+              data-bs-toggle="tooltip"
+              :for="idPrefix + '_taxable'"
+              >Taxable</label>
+          </div>
         </div>
       </div>
     </div>
@@ -74,6 +112,8 @@
 </template>
 
 <script>
+
+import Tooltips from "layout/tooltips"
 
 export default {
   components: {},
@@ -83,6 +123,9 @@ export default {
       paramPrefix: `simulation[params][fixed_incomes][${this.index}]`,
       idPrefix: `simulation_params_fixed_incomes_${this.index}`,
     };
+  },
+  mounted() {
+    Tooltips.activate(this.$el);
   }
 }
 

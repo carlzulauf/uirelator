@@ -10,14 +10,15 @@
 import Rails from "@rails/ujs"
 import Turbolinks from "turbolinks"
 import Vue from 'vue'
+import Tooltips from "layout/tooltips"
 // import * as ActiveStorage from "@rails/activestorage"
 import "channels"
-import "layout/tooltips"
 
 import FixedIncomesFormlet from 'components/fixed_incomes_formlet'
 
 Rails.start()
 Turbolinks.start()
+Tooltips.activateOnLoad()
 // ActiveStorage.start()
 
 // Vue.component('fixed-incomes-fields', FixedIncomesFormlet);

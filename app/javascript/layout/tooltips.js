@@ -1,8 +1,16 @@
 import { Tooltip } from 'bootstrap';
 
-window.tooltips = []
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((toolEl) => {
-    tooltips.push(new Tooltip(toolEl))
-  })
-})
+if (window.tooltips === undefined) { window.tooltips = [] };
+
+export default {
+  activateOnLoad() {
+    document.addEventListener("DOMContentLoaded", () => {
+      this.activate(document);
+    });
+  },
+  activate(scope) {
+    scope.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((el) => {
+      tooltips.push(new Tooltip(el));
+    });
+  }
+}
