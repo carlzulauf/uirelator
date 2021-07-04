@@ -9,7 +9,7 @@
         .row
           .col-4.text-center Key
           .col-8
-            %pre= simulation.key
+            %p.font-monospace= simulation.key
       = f.fields_for :params, simulation.params do |s|
         .row.mb-3
           = s.label :description, class: "col-4 col-form-label text-center", title: "Just a friendly label to help you remember this simulation.", **tooltip_options
@@ -152,4 +152,7 @@
               = s.text_field :savings_balance, class: "form-control"
   .row.mb-3
     .col.text-end
+      %button.btn.btn-success{name: "run", value: "yes"}
+        Run &nbsp;
+        = icon("play-circle")
       = f.submit class: "btn btn-primary"

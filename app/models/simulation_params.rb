@@ -2,7 +2,7 @@ class SimulationParams < OptStruct.new
   # percent params that need to be converted to ratios
   PERCENT_PARAMS = %i[noise_percent short_term_gains_percent]
 
-  def self.option_accessor(*keys, **options)
+  def self.option_writer(*keys, **options)
     option_names.concat(keys)
     super(*keys, **options)
   end
@@ -38,7 +38,7 @@ class SimulationParams < OptStruct.new
   end
 
   def self.default
-    params = Retirelator.default_params.without("name")
+    params = Retirelator.default_params.without("name", "description")
     new **params.deep_symbolize_keys
   end
 
@@ -48,7 +48,7 @@ class SimulationParams < OptStruct.new
 
   # RETIREE
   options :name, :monthly_allowance
-  # options :retirement_date, :target_death_date
+  option_writer :retirement_date, :target_death_date
 
   # INCOME
   options :salary, :salary_growth_rate
@@ -69,7 +69,6 @@ class SimulationParams < OptStruct.new
   end
 
   def noise_percent=(percent)
-    Rails.logger.warn ["noise_percent=", percent, percent.to_d].inspect
     return unless percent.present?
     self.noise = percent.to_d / 100
   end
@@ -108,8 +107,8 @@ class SimulationParams < OptStruct.new
     end
   end
 
-  def to_db
+  def to_hash
     options.slice(*self.class.option_names)
   end
-
+  alias_method :to_db, :to_hash
 end

@@ -4,14 +4,18 @@ module ApplicationHelper
     "#{sheet_path}##{name}"
   end
 
-  def icon(name, style: nil, title: nil)
+  def icon(name, style: nil, title: nil, **extras)
     icon = IconSprite.find(name, style: style)
     icon ||= IconSprite.find("exclamation-triangle", style: style)
-    extras = {}
-    extras = { title: title, data: { toggle: "tooltip" } } if title.present?
+    css_classes = ["sprite-icon", extras.delete(:class)].compact.join(" ")
+    if title.present?
+      extras[:title] = title
+      extras[:data] ||= {}
+      extras[:data][:'bs-toggle'] = "tooltip"
+    end
     sprite_path = asset_path("iconsprites/#{icon.sprite}.svg")
 
-    content_tag(:i, class: "sprite-icon", **extras) do
+    content_tag(:i, class: css_classes, **extras) do
       content_tag(:svg, viewBox: icon.view_box) do
         content_tag(:use, nil, href: sprite_path(icon.sprite, icon.name))
       end

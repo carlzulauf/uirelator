@@ -5,6 +5,10 @@ class SimulationsController < ApplicationController
     @simulation = Simulation.new
   end
 
+  def show
+    preload_js_data("balances", @simulation.perform(noise: false).monthly_balances)
+  end
+
   def create
     @simulation = Simulation.new(simulation_params)
     if @simulation.save
@@ -16,7 +20,11 @@ class SimulationsController < ApplicationController
 
   def update
     if @simulation.update(simulation_params)
-      redirect_to edit_simulation_path(@simulation)
+      if params[:run] =~ /yes/
+        redirect_to @simulation
+      else
+        redirect_to edit_simulation_path(@simulation)
+      end
     else
       render :edit
     end

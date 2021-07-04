@@ -13,6 +13,12 @@ class Simulation < ApplicationRecord
   attribute :params, :simulation_params
   before_save :ensure_key
 
+  def perform(noise: false)
+    sim_params = params.as_json
+    sim_params = sim_params.merge("noise" => "0") unless noise
+    Retirelator.from_params(sim_params).simulate!
+  end
+
   def to_param
     key
   end
