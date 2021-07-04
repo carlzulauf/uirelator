@@ -10,11 +10,11 @@ class SimulationParamsProxy < ActiveModel::Type::Value
   end
 
   def serialize(obj)
-    obj.to_json
+    obj.to_db.to_json
   end
 
   def from_hash(hash)
     return SimulationParams.default if hash.blank?
-    SimulationParams.new(hash.deep_symbolize_keys)
+    SimulationParams.from_db(hash)
   end
 end

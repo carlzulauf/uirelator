@@ -34,7 +34,7 @@ export default {
   },
   data() {
     return {
-      accounts: [],
+      accounts: Preloads.simulation_params.fixed_incomes,
       // icon: "+"
     };
   },
