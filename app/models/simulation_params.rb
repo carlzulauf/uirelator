@@ -111,4 +111,5 @@ class SimulationParams < OptStruct.new
     options.slice(*self.class.option_names)
   end
   alias_method :to_db, :to_hash
+  alias_method :to_h, :to_hash
 end

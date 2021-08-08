@@ -6,7 +6,9 @@ class SimulationsController < ApplicationController
   end
 
   def show
-    preload_js_data("balances", @simulation.perform(noise: false).monthly_balances)
+    @sim1 = @simulation.perform(noise: false)
+    preload_js_data("balances", @sim1.monthly_balances)
+    preload_js_data("simulation", @simulation.params.to_h.merge(start_date: @sim1.start_date))
   end
 
   def create

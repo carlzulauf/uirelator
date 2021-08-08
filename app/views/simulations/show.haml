@@ -1,2 +1,8 @@
-%h2 @simulation
-%pre= JSON.pretty_generate(@simulation.attributes.as_json)
+.row.align-items-center
+  .col-auto
+    %h3= @sim1.retiree.name
+  .col
+    %small.text-muted= @sim1.configuration.description
+.row
+  .col
+    .show-simulation

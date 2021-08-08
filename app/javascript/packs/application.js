@@ -15,6 +15,7 @@ import Tooltips from "layout/tooltips"
 import "channels"
 
 import FixedIncomesFormlet from 'components/fixed_incomes_formlet'
+import ShowSimulation from 'components/show_simulation'
 
 Rails.start()
 Turbolinks.start()
@@ -30,6 +31,7 @@ window.vueses = []
 document.addEventListener("DOMContentLoaded", () => {
   const selectorToComponent = [
     ["#fixedIncomesFields", FixedIncomesFormlet],
+    [".show-simulation", ShowSimulation],
   ];
   selectorToComponent.forEach((row) => {
     if (document.querySelector(row[0])) {
