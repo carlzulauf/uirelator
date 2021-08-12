@@ -7,19 +7,20 @@
 // require("bootstrap")
 // import { Tooltip, Toast, Popover } from 'bootstrap';
 
-import Rails from "@rails/ujs"
-import Turbolinks from "turbolinks"
-import Vue from 'vue'
-import Tooltips from "layout/tooltips"
+import Rails from "@rails/ujs";
+import Turbolinks from "turbolinks";
+import Vue from 'vue';
+import Tooltips from "layout/tooltips";
 // import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 
-import FixedIncomesFormlet from 'components/fixed_incomes_formlet'
-import ShowSimulation from 'components/show_simulation'
+import FixedIncomesFormlet from 'components/fixed_incomes_formlet';
+// import ShowSimulation from 'components/show_simulation'
+import BalancesChart from "components/balances_chart";
 
-Rails.start()
-Turbolinks.start()
-Tooltips.activateOnLoad()
+Rails.start();
+Turbolinks.start();
+Tooltips.activateOnLoad();
 // ActiveStorage.start()
 
 // Vue.component('fixed-incomes-fields', FixedIncomesFormlet);
@@ -27,11 +28,12 @@ Tooltips.activateOnLoad()
 //   new Vue({ el: '#app' });
 // });
 // start vue components
-window.vueses = []
+window.BalancesChart = BalancesChart;
+window.vueses = [];
 document.addEventListener("DOMContentLoaded", () => {
   const selectorToComponent = [
     ["#fixedIncomesFields", FixedIncomesFormlet],
-    [".show-simulation", ShowSimulation],
+    // [".show-simulation", ShowSimulation],
   ];
   selectorToComponent.forEach((row) => {
     if (document.querySelector(row[0])) {

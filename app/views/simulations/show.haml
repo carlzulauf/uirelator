@@ -6,3 +6,5 @@
 .row
   .col
     .show-simulation
+    :javascript
+      window.currentBalancesChart = new BalancesChart({el: document.querySelector(".show-simulation")});
