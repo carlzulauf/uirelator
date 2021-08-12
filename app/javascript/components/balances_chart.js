@@ -24,7 +24,8 @@ class BalancesChart {
   buildSvg() {
     this.svg = d3.select(this.options.el)
                  .append("svg")
-                 .attr("viewBox", [0, 0, this.options.width, this.options.height]);
+                 .attr("viewBox", [0, 0, this.options.width, this.options.height])
+                 .style("overflow", "visible");
     this.svg.append("g").call(this.buildXAxis());
     this.svg.append("g").call(this.buildYAxis());
   }
@@ -72,7 +73,7 @@ class BalancesChart {
     path.attr("stroke-dasharray", `${length} ${length}`)
         .attr("stroke-dashoffset", length)
         .transition()
-          .duration(3000)
+          .duration(2000)
           .ease(d3.easeSin)
           .attr("stroke-dashoffset", 0);
   }
@@ -122,7 +123,7 @@ class BalancesChart {
       .call(t =>
         t.selectAll("tspan")
           .data([
-            `Date: ${formatDate(data.date)}`,
+            formatDate(data.date),
             `Total: ${formatCurrency(data.total)}`
           ])
           .join("tspan")
@@ -131,6 +132,8 @@ class BalancesChart {
             .style("font-weight", (_, i) => i ? null : "bold")
             .text(d => d));
     const {x, y, width: w, height: h} = text.node().getBBox();
+    text.attr("transform", `translate(${-w / 2}, ${15 - y})`);
+    path.attr("d", `M${-w / 2 - 10},5H-5l5,-5l5,5H${w / 2 + 10}v${h + 20}h-${w + 20}z`);
   }
 
   dateBisector() {
@@ -159,6 +162,16 @@ class BalancesChart {
 
   dates() {
     return Preloads.balances.dates.map(str => parseDate(str));
+  }
+
+  rowFormat() {
+    return {
+      date: new Date(),
+      totals: [1000, 1001],
+      // mirrors account names array elsewhere
+      balances: [ [500, 250, 250], [500, 251, 250] ],
+
+    }
   }
 
   datesWithBalances() {
