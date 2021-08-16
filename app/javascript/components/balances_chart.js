@@ -7,7 +7,7 @@ const parseDate = d3.timeParse("%Y-%m-%d");
 class BalancesChart {
   constructor(options) {
     this.options = Object.assign(this.defaultOptions(), options);
-    this.buildSvg();
+    this.svg = this.buildSvg();
     this.drawInitialLine();
     this.createTooltip();
     console.log(["new BalancesChart()", this]);
@@ -22,18 +22,19 @@ class BalancesChart {
   }
 
   buildSvg() {
-    this.svg = d3.select(this.options.el)
-                 .append("svg")
-                 .attr("viewBox", [0, 0, this.options.width, this.options.height])
-                 .style("overflow", "visible");
-    this.svg.append("g").call(this.buildXAxis());
-    this.svg.append("g").call(this.buildYAxis());
+    const
+      width = this.options.width,
+      height = this.options.height,
+      margin = this.options.margin;
+    const svg = d3.select(this.options.el).append("svg")
+      .attr("viewBox", [0, 0, width, height])
+      .style("overflow", "visible");
+    svg.append("g").call(this.buildXAxis(margin, width, height));
+    svg.append("g").call(this.buildYAxis(margin, height));
+    return svg;
   }
 
-  buildXAxis() {
-    const margin = this.options.margin,
-          width = this.options.width,
-          height = this.options.height;
+  buildXAxis(margin, width, height) {
     this.xScale = d3.scaleTime()
                     .domain([this.startDate(), this.stopDate()])
                     .range([margin.left, width - margin.right]);
@@ -43,10 +44,8 @@ class BalancesChart {
     }
   }
 
-  buildYAxis() {
-    const margin = this.options.margin,
-          height = this.options.height,
-          maxY = d3.max(this.balances()) * 1.3;
+  buildYAxis(margin, height) {
+    const maxY = d3.max(this.balances()) * 1.3;
     this.yScale = d3.scaleLinear()
                     .domain([0, maxY])
                     .range([height - margin.bottom, margin.top]);
@@ -79,24 +78,34 @@ class BalancesChart {
   }
 
   createTooltip() {
-    const svg = this.svg,
-          tooltip = svg.append("g"),
-          bisect = this.dateBisector(),
-          x = this.xScale,
-          y = this.yScale,
-          show = this.showTooltip;
+    // .style("font", "10px sans-serif")
+    const
+      svg = this.svg,
+      tooltip = svg.append("g")
+        .style("pointer-events", "none")
+        .style("opacity", 0)
+        .style("transition", "opacity 500ms ease-in-out"),
+      x = this.xScale,
+      y = this.yScale,
+      bisect = this.dateBisector(),
+      show = this.showTooltip,
+      hide = this.hideTooltip;
     svg.on("touchmove mousemove", function (event) {
       const data = bisect(d3.pointer(event, this)[0]);
       tooltip.attr("transform", `translate(${x(data.date)},${y(data.total)})`)
              .call(show, data);
     });
+    svg.on("touchend mouseleave", () => tooltip.call(hide));
+  }
+
+  hideTooltip(g) {
+    g.style("opacity", 0);
   }
 
   showTooltip(g, data) {
-    g.style("display", null)
+    g.style("opacity", 1)
      .style("pointer-events", "none")
      .style("font", "10px sans-serif");
-
     const formatDate = (date) => {
       return date.toLocaleString("en", {
         month:  "numeric",

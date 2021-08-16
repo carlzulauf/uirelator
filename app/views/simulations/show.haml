@@ -1,10 +1,12 @@
-.row.align-items-center
-  .col-auto
-    %h3= @sim1.retiree.name
-  .col
-    %small.text-muted= @sim1.configuration.description
-.row
-  .col
-    .show-simulation
-    :javascript
-      window.currentBalancesChart = new BalancesChart({el: document.querySelector(".show-simulation")});
+.container
+  .row.align-items-center
+    .col-auto
+      %h3= @sim1.retiree.name
+    .col
+      %small.text-muted= @sim1.configuration.description
+.container-fluid
+  .row
+    .col
+      .show-simulation
+      // :javascript
+      //   window.currentBalancesChart = new BalancesChart({el: document.querySelector(".show-simulation")});
