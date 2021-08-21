@@ -10,7 +10,7 @@ class BalancesChart {
     this.svg = this.buildSvg();
     this.drawInitialLine();
     this.createTooltip();
-    console.log(["new BalancesChart()", this]);
+    window.currentBalancesChart = this;
   }
 
   defaultOptions() {
@@ -78,7 +78,6 @@ class BalancesChart {
   }
 
   createTooltip() {
-    // .style("font", "10px sans-serif")
     const
       svg = this.svg,
       tooltip = svg.append("g")
@@ -104,8 +103,7 @@ class BalancesChart {
 
   showTooltip(g, data) {
     g.style("opacity", 1)
-     .style("pointer-events", "none")
-     .style("font", "10px sans-serif");
+     .style("pointer-events", "none");
     const formatDate = (date) => {
       return date.toLocaleString("en", {
         month:  "numeric",
