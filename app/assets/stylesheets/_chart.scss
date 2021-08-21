@@ -1,5 +1,6 @@
 .show-simulation {
-  .axis {
-    font-size: 14px;
+  // increase the font size of x/y axis labels and tooltip
+  text {
+    font-size: 12px;
   }
 }
