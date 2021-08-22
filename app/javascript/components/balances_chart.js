@@ -45,15 +45,18 @@ class BalancesChart {
   }
 
   buildYAxis(margin, height) {
-    const maxY = d3.max(this.balances()) * 1.3;
     this.yScale = d3.scaleLinear()
-                    .domain([0, maxY])
+                    .domain([0, this.maxY()])
                     .range([height - margin.bottom, margin.top]);
     return (g) => {
       g.attr("transform", `translate(${margin.left}, 0)`)
        .call(d3.axisLeft(this.yScale))
        .call(g => g.select(".domain").remove());
     }
+  }
+
+  maxY() {
+    return d3.max(this.balances()) * 1.3;
   }
 
   drawInitialLine() {
@@ -164,42 +167,51 @@ class BalancesChart {
   }
 
   balances() {
-    return Preloads.balances.balances.map(accounts => d3.sum(accounts));
+    // return Preloads.balances.balances.map(accounts => d3.sum(accounts));
+    return Preloads.summary.columns.map(col => +col.totals[0]);
   }
 
   dates() {
-    return Preloads.balances.dates.map(str => parseDate(str));
+    // return Preloads.balances.dates.map(str => parseDate(str));
+    return Preloads.summary.columns.map(col => parseDate(col.date));
   }
 
-  columnFormat() {
-    return {
-      date: new Date(),
-      totals: [1000, 1001],
-      // mirrors account names array elsewhere
-      balances: [ [500, 250, 250], [500, 251, 250] ]
-    }
-  }
-
-  dataFormat() {
-    return {
-      dates: ["2020-01-01"], // corresponds to number/index of column objects (width of matrix)
-      accounts: ["IRA", "Savings", "Roth"], // corresponds to index of account within each row in column object balances
-      simulations: [0, 39363204521742172398000198292480853792], // corresponds to number of rows within column objects (height of matrix)
-      columns: this.columnFormat()
-    };
-  }
+  // columnFormat() {
+  //   return {
+  //     date: new Date(),
+  //     totals: [1000, 1001],
+  //     // mirrors account names array elsewhere
+  //     balances: [ [500, 250, 250], [500, 251, 250] ]
+  //   }
+  // }
+  //
+  // dataFormat() {
+  //   return {
+  //     dates: ["2020-01-01"], // corresponds to number/index of column objects (width of matrix)
+  //     accounts: ["IRA", "Savings", "Roth"], // corresponds to index of account within each row in column object balances
+  //     simulations: [0, 39363204521742172398000198292480853792], // corresponds to number of rows within column objects (height of matrix)
+  //     columns: this.columnFormat()
+  //   };
+  // }
 
   datesWithBalances() {
-    const dates = this.dates(),
-          balances = Preloads.balances.balances;
-    return dates.map((date, index) => {
+    return Preloads.summary.columns.map((col) => {
       return {
-        date: date,
-        balances: balances[index],
-        total: d3.max([0, d3.sum(balances[index])]),
-        index: index
-      };
+        date: parseDate(col.date),
+        balances: col.balances[0].map(b => +b),
+        total: +col.totals[0],
+      }
     });
+    // const dates = this.dates(),
+    //       balances = Preloads.balances.balances;
+    // return dates.map((date, index) => {
+    //   return {
+    //     date: date,
+    //     balances: balances[index],
+    //     total: d3.max([0, d3.sum(balances[index])]),
+    //     index: index
+    //   };
+    // });
   }
 
   startDate() {

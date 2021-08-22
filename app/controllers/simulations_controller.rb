@@ -7,6 +7,7 @@ class SimulationsController < ApplicationController
 
   def show
     @sim1 = @simulation.perform(noise: false)
+    preload_js_data("summary", @sim1.summarize.as_json)
     preload_js_data("balances", @sim1.monthly_balances)
     preload_js_data("simulation", @simulation.params.to_h.merge(start_date: @sim1.start_date))
   end
