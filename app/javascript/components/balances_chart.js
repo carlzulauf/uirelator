@@ -171,14 +171,22 @@ class BalancesChart {
     return Preloads.balances.dates.map(str => parseDate(str));
   }
 
-  rowFormat() {
+  columnFormat() {
     return {
       date: new Date(),
       totals: [1000, 1001],
       // mirrors account names array elsewhere
-      balances: [ [500, 250, 250], [500, 251, 250] ],
-
+      balances: [ [500, 250, 250], [500, 251, 250] ]
     }
+  }
+
+  dataFormat() {
+    return {
+      dates: ["2020-01-01"], // corresponds to number/index of column objects (width of matrix)
+      accounts: ["IRA", "Savings", "Roth"], // corresponds to index of account within each row in column object balances
+      simulations: [0, 39363204521742172398000198292480853792], // corresponds to number of rows within column objects (height of matrix)
+      columns: this.columnFormat()
+    };
   }
 
   datesWithBalances() {
