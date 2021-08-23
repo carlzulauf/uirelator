@@ -1,16 +1,18 @@
-<div class="row">
-  <div class="col">
-    <h1>Edit Simulation</h1>
-  </div>
-  <div class="col text-end align-text-bottom">
-    <button
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1>Edit Simulation</h1>
+    </div>
+    <div class="col text-end align-text-bottom">
+      <button
         form="edit_simulation"
         name="run" value="yes"
         class="btn btn-lg"
         title="Run simulation"
         data-bs-toggle="tooltip">
-      <%= icon("play-circle", class: "success") %>
-    </button>
+        <%= icon("play-circle", class: "success") %>
+      </button>
+    </div>
   </div>
+  <%= render "form", simulation: @simulation %>
 </div>
-<%= render "form", simulation: @simulation %>

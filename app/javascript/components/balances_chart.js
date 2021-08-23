@@ -7,9 +7,10 @@ const parseDate = d3.timeParse("%Y-%m-%d");
 class BalancesChart {
   constructor(options) {
     this.options = Object.assign(this.defaultOptions(), options);
+    this.columns = this.preloadedColumns();
     this.svg = this.buildSvg();
-    this.drawInitialLine();
     this.createTooltip();
+    this.drawPreloadedLines();
     window.currentBalancesChart = this;
   }
 
@@ -36,8 +37,8 @@ class BalancesChart {
 
   buildXAxis(margin, width, height) {
     this.xScale = d3.scaleTime()
-                    .domain([this.startDate(), this.stopDate()])
-                    .range([margin.left, width - margin.right]);
+      .domain([this.startDate(), this.stopDate()])
+      .range([margin.left, width - margin.right]);
     return (g) => {
       g.attr("transform", `translate(0, ${height - margin.bottom})`)
        .call(d3.axisBottom(this.xScale).tickSizeOuter(0));
@@ -46,8 +47,8 @@ class BalancesChart {
 
   buildYAxis(margin, height) {
     this.yScale = d3.scaleLinear()
-                    .domain([0, this.maxY()])
-                    .range([height - margin.bottom, margin.top]);
+      .domain([0, this.maxY()])
+      .range([height - margin.bottom, margin.top]);
     return (g) => {
       g.attr("transform", `translate(${margin.left}, 0)`)
        .call(d3.axisLeft(this.yScale))
@@ -59,25 +60,51 @@ class BalancesChart {
     return d3.max(this.balances()) * 1.3;
   }
 
-  drawInitialLine() {
+  drawPreloadedLines() {
+    this.columns[0].totals.forEach((_total, lineNum) => this.drawLine(lineNum));
+  }
+
+  drawLine(index = 0) {
+    const lineData = this.buildLineData(index);
     const line = d3.line()
-                   .curve(d3.curveLinear)
-                   .x(d => this.xScale(d.date))
-                   .y(d => this.yScale(d.total));
-    this.initialLineData = this.datesWithBalances();
+      .curve(d3.curveLinear)
+      .x(c => this.xScale(c.date))
+      .y(c => this.yScale(c.total));
+    const color = this.lineColor(index);
     const path = this.svg.append("path")
-      .datum(this.initialLineData)
+      .datum(lineData)
       .attr("fill", "none")
-      .attr("stroke", "red")
-      .attr("stroke-width", 2.0)
+      .attr("stroke", color)
       .attr("d", line);
     const length = path.node().getTotalLength();
+
+    if (index == 0) {
+      path.attr("stroke-width", 2.0);
+    } else {
+      path.attr("stroke-width", 1.5)
+        .attr("opacity", 0.6);
+    }
     path.attr("stroke-dasharray", `${length} ${length}`)
-        .attr("stroke-dashoffset", length)
-        .transition()
-          .duration(2000)
-          .ease(d3.easeSin)
-          .attr("stroke-dashoffset", 0);
+      .attr("stroke-dashoffset", length)
+      .transition()
+        .duration(2000)
+        .ease(d3.easeSin)
+        .attr("stroke-dashoffset", 0);
+  }
+
+  buildLineData(index = 0) {
+    const points = [];
+    this.columns.forEach((col, colNum) => {
+      if (colNum == 0 || col.totals[index] > 0) {
+        points.push({ date: col.date, total: col.totals[index], index: index });
+      }
+    });
+    return points;
+  }
+
+  lineColor(index) {
+    const last = this.columns[ this.columns.length - 1 ];
+    return last.totals[index] > 0 ? "green" : "red";
   }
 
   createTooltip() {
@@ -93,9 +120,9 @@ class BalancesChart {
       show = this.showTooltip,
       hide = this.hideTooltip;
     svg.on("touchmove mousemove", function (event) {
-      const data = bisect(d3.pointer(event, this)[0]);
-      tooltip.attr("transform", `translate(${x(data.date)},${y(data.total)})`)
-             .call(show, data);
+      const col = bisect(d3.pointer(event, this)[0]);
+      tooltip.attr("transform", `translate(${x(col.date)},${y(col.totals[0])})`)
+             .call(show, col);
     });
     svg.on("touchend mouseleave", () => tooltip.call(hide));
   }
@@ -134,7 +161,7 @@ class BalancesChart {
         t.selectAll("tspan")
           .data([
             formatDate(data.date),
-            `Total: ${formatCurrency(data.total)}`
+            `Total: ${formatCurrency(data.totals[0])}`
           ])
           .join("tspan")
             .attr("x", 0)
@@ -147,13 +174,12 @@ class BalancesChart {
   }
 
   dateBisector() {
-    const bisect = d3.bisector(d => d.date).left,
-          data = this.initialLineData;
+    const bisect = d3.bisector(d => d.date).left;
     return (mx) => {
       const date = this.xScale.invert(mx),
-            index = bisect(data, date, 1),
-            a = data[index - 1],
-            b = data[index];
+            index = bisect(this.columns, date, 1),
+            a = this.columns[index - 1],
+            b = this.columns[index];
       return b && (date - a.date > b.date - date) ? b : a;
     }
   }
@@ -166,60 +192,28 @@ class BalancesChart {
     return value.toLocaleString("en", { style: "currency", currency: "USD" });
   }
 
-  balances() {
-    // return Preloads.balances.balances.map(accounts => d3.sum(accounts));
-    return Preloads.summary.columns.map(col => +col.totals[0]);
+  balances(index = 0) {
+    return this.columns.map(col => col.totals[index]);
   }
 
-  dates() {
-    // return Preloads.balances.dates.map(str => parseDate(str));
-    return Preloads.summary.columns.map(col => parseDate(col.date));
-  }
-
-  // columnFormat() {
-  //   return {
-  //     date: new Date(),
-  //     totals: [1000, 1001],
-  //     // mirrors account names array elsewhere
-  //     balances: [ [500, 250, 250], [500, 251, 250] ]
-  //   }
-  // }
-  //
-  // dataFormat() {
-  //   return {
-  //     dates: ["2020-01-01"], // corresponds to number/index of column objects (width of matrix)
-  //     accounts: ["IRA", "Savings", "Roth"], // corresponds to index of account within each row in column object balances
-  //     simulations: [0, 39363204521742172398000198292480853792], // corresponds to number of rows within column objects (height of matrix)
-  //     columns: this.columnFormat()
-  //   };
-  // }
-
-  datesWithBalances() {
-    return Preloads.summary.columns.map((col) => {
-      return {
+  preloadedColumns() {
+    const columns = [];
+    Preloads.summary.columns.forEach((col, colNum) => {
+      columns.push({
         date: parseDate(col.date),
-        balances: col.balances[0].map(b => +b),
-        total: +col.totals[0],
-      }
+        balances: col.balances.map(accounts => accounts.map(b => +b)),
+        totals: col.totals.map(t => +t)
+      });
     });
-    // const dates = this.dates(),
-    //       balances = Preloads.balances.balances;
-    // return dates.map((date, index) => {
-    //   return {
-    //     date: date,
-    //     balances: balances[index],
-    //     total: d3.max([0, d3.sum(balances[index])]),
-    //     index: index
-    //   };
-    // });
+    return columns;
   }
 
   startDate() {
-    return new Date(Preloads.simulation.start_date);
+    return this.columns[0].date;
   }
 
   stopDate() {
-    return new Date(Preloads.simulation.target_death_date);
+    return this.columns[this.columns.length - 1].date;
   }
 }
 
