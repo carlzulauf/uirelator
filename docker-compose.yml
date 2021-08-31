@@ -1,0 +1,25 @@
+version: "3.3"
+services:
+  web:
+    env_file: docker-compose.env
+    build: .
+    ports:
+      - "3111:3111"
+    depends_on:
+        - postgres
+        - redis
+  redis:
+    image: "redis:6"
+    expose:
+      - 6379
+  postgres:
+    image: "postgres:13"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: uirelator
+    expose:
+      - 5432
+volumes:
+  db-data:

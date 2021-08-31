@@ -1,10 +1,10 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.0.1"
+ruby "3.0.2"
 
 gem "rails", "~> 6.1.3"
-gem "retirelator", path: "../retirelator"
+gem "retirelator", github: "carlzulauf/retirelator"
 gem "puma", "~> 5.0"
 
 gem "pg"
