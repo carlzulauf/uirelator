@@ -24,5 +24,6 @@ RUN yarn install
 COPY . /app
 
 ENV RAILS_ENV=production
+ENV RAILS_SECRET_KEY_BASE=placeholder
 RUN bundle exec rails assets:precompile
 CMD bundle exec rails server
