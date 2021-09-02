@@ -23,6 +23,8 @@ Turbolinks.start();
 Tooltips.activateOnLoad();
 // ActiveStorage.start()
 
+import "controllers"
+
 // Vue.component('fixed-incomes-fields', FixedIncomesFormlet);
 // document.addEventListener("DOMContentLoaded", () => {
 //   new Vue({ el: '#app' });

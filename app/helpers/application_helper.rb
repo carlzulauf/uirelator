@@ -32,4 +32,16 @@ module ApplicationHelper
       "icons" => IconSprite.by_name.as_json,
     }
   end
+
+  def stimulus_controllers
+    @stimulus_controllers ||= Set.new([ params[:controller] ])
+  end
+
+  def add_stimulus_controller(name)
+    stimulus_controllers << name.to_s
+  end
+
+  def stimulus_controller_names
+    stimulus_controllers.map(&:dasherize).join(" ")
+  end
 end

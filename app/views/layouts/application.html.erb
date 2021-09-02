@@ -34,7 +34,7 @@
         </div>
       </div>
     </header>
-    <div class="mb-5" id="app">
+    <div class="mb-5" id="app" data-controller="<%= stimulus_controller_names %>" data-action="<%= params[:action] %>">
       <%= yield %>
     </div>
     <footer class="navbar navbar-dark bg-dark">
