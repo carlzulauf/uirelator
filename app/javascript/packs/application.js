@@ -10,9 +10,11 @@
 import Rails from "@rails/ujs";
 import Turbolinks from "turbolinks";
 import Vue from 'vue';
+import VueRouter from 'vue-router';
 import Tooltips from "layout/tooltips";
 // import * as ActiveStorage from "@rails/activestorage"
-import "channels"
+import "channels";
+import "controllers";
 
 import FixedIncomesFormlet from 'components/fixed_incomes_formlet';
 import ShowSimulation from 'components/show_simulation'
@@ -22,8 +24,8 @@ Rails.start();
 Turbolinks.start();
 Tooltips.activateOnLoad();
 // ActiveStorage.start()
+Vue.use(VueRouter);
 
-import "controllers"
 
 // Vue.component('fixed-incomes-fields', FixedIncomesFormlet);
 // document.addEventListener("DOMContentLoaded", () => {

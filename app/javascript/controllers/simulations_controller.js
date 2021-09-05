@@ -6,4 +6,8 @@ export default class extends Controller {
   connect() {
     console.log("in that sweet stimus controller")
   }
+
+  show() {
+    console.log("i guess actions work better than docs say")
+  }
 }
