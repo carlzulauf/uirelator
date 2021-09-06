@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/carlzulauf/retirelator.git
-  revision: 627a6b2fbf8c748fff7095531ea9e186873667ec
+  revision: 97d0a3163977c1bd1db3d9208b6d991b6912283a
   branch: main
   specs:
     retirelator (0.1.0)
