@@ -1,13 +1,10 @@
-import { Controller } from "stimulus"
+import { Controller } from "stimulus";
+import Tooltips from "layout/tooltips";
 
 export default class extends Controller {
-  static targets = [];
+  static targets = ['page'];
 
   connect() {
-    console.log("in that sweet stimus controller")
-  }
-
-  show() {
-    console.log("i guess actions work better than docs say")
+    Tooltips.activate(document);
   }
 }

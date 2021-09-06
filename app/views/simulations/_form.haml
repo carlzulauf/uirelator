@@ -1,5 +1,6 @@
--# - add_js_pack("simulation_form")
-= form_for(simulation, as: :simulation) do |f|
+- add_stimulus_controller :config
+
+= form_for(simulation, as: :simulation, html: { "data-target": "config.form" }) do |f|
   - tooltip_options = { data: { "bs-toggle" => "tooltip" } }
   - preload_js_data(:simulation_params, simulation.params.to_params)
   .card.mb-3
@@ -76,7 +77,7 @@
             .input-group
               = s.text_field :salary_growth_rate, class: "form-control"
               %span.input-group-text %
-    #fixedIncomesFields
+    .fixed-income-fields{ data: { target: "config.fixedIncomes" }}
     .card.mb-3
       .card-header Retirement Contributions
       .card-body
