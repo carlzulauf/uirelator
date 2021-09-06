@@ -5,8 +5,8 @@ class BalancesChart {
     this.options = Object.assign(this.defaultOptions(), options);
     this.columns = columns;
     this.svg = this.buildSvg();
-    this.createTooltip();
     this.drawPreloadedLines();
+    this.createTooltip();
     window.currentBalancesChart = this; // DEBUG
   }
 
