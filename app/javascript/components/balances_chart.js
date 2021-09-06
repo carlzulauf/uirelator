@@ -1,17 +1,13 @@
 import * as d3 from "d3";
 
-window.d3 = d3;
-
-const parseDate = d3.timeParse("%Y-%m-%d");
-
 class BalancesChart {
-  constructor(options) {
+  constructor(options, columns) {
     this.options = Object.assign(this.defaultOptions(), options);
-    this.columns = this.preloadedColumns();
+    this.columns = columns;
     this.svg = this.buildSvg();
     this.createTooltip();
     this.drawPreloadedLines();
-    window.currentBalancesChart = this;
+    window.currentBalancesChart = this; // DEBUG
   }
 
   defaultOptions() {
@@ -20,6 +16,10 @@ class BalancesChart {
       height: 576,
       margin: { bottom: 20, left: 100, right: 15, top: 0 }
     };
+  }
+
+  remove() {
+    this.options.el.innerHTML = '';
   }
 
   buildSvg() {
@@ -194,18 +194,6 @@ class BalancesChart {
 
   balances(index = 0) {
     return this.columns.map(col => col.totals[index]);
-  }
-
-  preloadedColumns() {
-    const columns = [];
-    Preloads.summary.columns.forEach((col, colNum) => {
-      columns.push({
-        date: parseDate(col.date),
-        balances: col.balances.map(accounts => accounts.map(b => +b)),
-        totals: col.totals.map(t => +t)
-      });
-    });
-    return columns;
   }
 
   startDate() {

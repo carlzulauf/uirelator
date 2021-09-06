@@ -1,8 +1,8 @@
 - add_stimulus_controller :config
+- preload_js_data(:simulation_params, simulation.params.to_params)
+- tooltip_options = { data: { "bs-toggle" => "tooltip" } }
 
 = form_for(simulation, as: :simulation, html: { "data-target": "config.form" }) do |f|
-  - tooltip_options = { data: { "bs-toggle" => "tooltip" } }
-  - preload_js_data(:simulation_params, simulation.params.to_params)
   .card.mb-3
     .card-header Simulation Options
     .card-body
