@@ -1,6 +1,7 @@
 GIT
   remote: https://github.com/carlzulauf/retirelator.git
   revision: 627a6b2fbf8c748fff7095531ea9e186873667ec
+  branch: main
   specs:
     retirelator (0.1.0)
       opt_struct (>= 1.2.0)
