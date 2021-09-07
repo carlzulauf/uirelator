@@ -9,7 +9,7 @@ class SimulationsController < ApplicationController
     @sim1 = @simulation.perform(noise: false)
     summary = @sim1.summarize
     4.times { summary << @simulation.perform(noise: true).summarize }
-    preload_js_data("summaries", [summary.as_json])
+    preload_js_data("summaries", [summary.as_json.merge(key: @simulation.key)])
     preload_js_data("simulations", [@simulation.params.to_h.merge(start_date: @sim1.start_date)])
   end
 

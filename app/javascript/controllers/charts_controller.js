@@ -14,19 +14,17 @@ export default class extends Controller {
 
   drawCharts() {
     if (this.chartInstances) this.removeCharts();
-    this.chartInstances = [];
+    this.chartInstances = {};
     this.chartTargets.forEach((el, i) => {
       const width = el.clientWidth;
       // maintain 16:10 aspect ratio
       const height = Math.ceil((width / 16) * 10);
-
-      this.chartInstances.push(
-        new BalancesChart({
-          el: el,
-          width: width,
-          height: height,
-        }, this.getSummary(i))
-      );
+      const { columns, key } = this.getSummary(i);
+      this.chartInstances[key] = new BalancesChart({
+        el: el,
+        width: width,
+        height: height,
+      }, columns);
     });
   }
 
@@ -35,8 +33,9 @@ export default class extends Controller {
   }
 
   getSummary(index) {
+    const summary = Preloads.summaries[index];
     const columns = [];
-    Preloads.summaries[index].columns.forEach((col, colNum) => {
+    summary.columns.forEach((col, colNum) => {
       // preloaded JSON needs dates parsed and string numbers numberfied
       columns.push({
         date: parseDate(col.date),
@@ -44,6 +43,6 @@ export default class extends Controller {
         totals: col.totals.map(t => +t)
       });
     });
-    return columns;
+    return { columns, key: summary.key };
   }
 }
